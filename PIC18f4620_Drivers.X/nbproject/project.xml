@@ -10,6 +10,7 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>MCAL</sourceRootElem>
+                <sourceRootElem>ECU_Layer</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

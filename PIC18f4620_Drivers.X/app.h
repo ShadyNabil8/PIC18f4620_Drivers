@@ -11,6 +11,8 @@
 /* includes */
 #include "MCAL/compiler.h"
 #include "MCAL/GPIO/hal_gpio.h"
+#include "ECU_Layer/LED/ecu_led.h"
+#include "ECU_Layer/btn/ecu_button.h"
 
 #endif	/* APP_H */
 

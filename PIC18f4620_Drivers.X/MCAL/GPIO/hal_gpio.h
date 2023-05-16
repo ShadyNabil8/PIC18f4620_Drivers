@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   hal_gpio.h
  * Author: shady
  *
@@ -6,39 +6,41 @@
  */
 
 #ifndef HAL_GPIO_H
-#define	HAL_GPIO_H
+#define HAL_GPIO_H
 
 /* includes */
 #include "../mcal_std_types.h"
 #include "../device_config.h"
 #include "hal_gpio_cfg.h"
 
-
 /* Section: Macro Declarations */
-#define BIT_MASK  (uint8_t)  1
-#define PORT_PIN_MAX_NUMBER  8
-#define PORT_MAX_NUMBER      5
-#define PORTC_MASK           0xFF
+#define BIT_MASK (uint8_t)1
+#define PORT_PIN_MAX_NUMBER 8
+#define PORT_MAX_NUMBER 5
+#define PORTC_MASK 0xFF
 
 /* Macro function declaration */
-#define HWREG8(_X)                (*((volatile uint8 *)(_X)))
-#define SET_BIT(REG, BIT_POSN)     (REG |= (BIT_MASK << BIT_POSN))
-#define CLEAR_BIT(REG, BIT_POSN)   (REG &= ~(BIT_MASK << BIT_POSN))
-#define TOGGLE_BIT(REG, BIT_POSN)  (REG ^= (BIT_MASK << BIT_POSN))
-#define READ_BIT(REG, BIT_POSN)    ((REG >> BIT_POSN) & BIT_MASK)
+#define HWREG8(_X) (*((volatile uint8 *)(_X)))
+#define SET_BIT(REG, BIT_POSN) (REG |= (BIT_MASK << BIT_POSN))
+#define CLEAR_BIT(REG, BIT_POSN) (REG &= ~(BIT_MASK << BIT_POSN))
+#define TOGGLE_BIT(REG, BIT_POSN) (REG ^= (BIT_MASK << BIT_POSN))
+#define READ_BIT(REG, BIT_POSN) ((REG >> BIT_POSN) & BIT_MASK)
 
 /* Section: Data Type Declarations */
-typedef enum {
+typedef enum
+{
     GPIO_LOW,
     GPIO_HIGH
 } logic_t;
 
-typedef enum {
+typedef enum
+{
     GPIO_DIRECTION_OUTPUT,
     GPIO_DIRECTION_INPUT
-} direction_t;
+} pin_direction_t;
 
-typedef enum {
+typedef enum
+{
     GPIO_PIN0,
     GPIO_PIN1,
     GPIO_PIN2,
@@ -49,7 +51,8 @@ typedef enum {
     GPIO_PIN7
 } pin_posn_t;
 
-typedef enum {
+typedef enum
+{
     GPIO_PORTA_INDEX,
     GPIO_PORTB_INDEX,
     GPIO_PORTC_INDEX,
@@ -57,7 +60,8 @@ typedef enum {
     GPIO_PORTE_INDEX
 } port_index_t;
 
-typedef struct {
+typedef struct
+{
     uint8 port : 3;
     uint8 pin : 3;
     uint8 direction : 1;
@@ -66,7 +70,7 @@ typedef struct {
 
 /* Section: Function Declarations */
 Std_ReturnType gpio_pin_direction_intialize(const pin_config_t *_pin_config);
-Std_ReturnType gpio_pin_get_direction_status(const pin_config_t *_pin_config, direction_t *direction_status);
+Std_ReturnType gpio_pin_get_direction_status(const pin_config_t *_pin_config, pin_direction_t *direction_status);
 Std_ReturnType gpio_pin_write_logic(const pin_config_t *_pin_config, logic_t logic);
 Std_ReturnType gpio_pin_read_logic(const pin_config_t *_pin_config, logic_t *logic);
 Std_ReturnType gpio_pin_toggle_logic(const pin_config_t *_pin_config);
@@ -78,6 +82,4 @@ Std_ReturnType gpio_port_write_logic(port_index_t port, uint8 logic);
 Std_ReturnType gpio_port_read_logic(port_index_t port, uint8 *logic);
 Std_ReturnType gpio_port_toggle_logic(port_index_t port);
 
-
-#endif	/* HAL_GPIO_H */
-
+#endif /* HAL_GPIO_H */

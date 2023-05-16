@@ -7,37 +7,47 @@
 
 #include "app.h"
 
+button_state_t state = BUTTON_PRESSED;
+ logic_t logic = GPIO_HIGH;
 void main(void)
 {
     Std_ReturnType ret;
-    pin_config_t PINC0 = {
-        .port = GPIO_PORTC_INDEX,
-        .pin = GPIO_PIN0,
-        .direction = GPIO_DIRECTION_OUTPUT,
-        .logic = GPIO_HIGH};
-    pin_config_t PINB0 = {
-        .port = GPIO_PORTB_INDEX,
-        .pin = GPIO_PIN0,
-        .direction = GPIO_DIRECTION_OUTPUT,
-        .logic = GPIO_HIGH};
-    //    Std_ReturnType ret = gpio_pin_direction_intialize(&pinA0);
-    //    ret = gpio_pin_write_logic(&pinA0,GPIO_HIGH);
+    led_t led1 =
+        {
+            .port = GPIO_PORTA_INDEX,
+            .pin = GPIO_PIN0,
+            .led_status = LED_ON};
 
-    ret = gpio_port_direction_intialize(GPIO_PORTB_INDEX, 0x00);
-    ret = gpio_port_write_logic(GPIO_PORTB_INDEX, 0x00);
-    ret = gpio_port_direction_intialize(GPIO_PORTC_INDEX, 0xFF);
+    /*pin_config_t pin =
+    {
+        .direction = GPIO_DIRECTION_INPUT,
+        .logic = GPIO_HIGH,
+        .port = GPIO_PORTD_INDEX,
+        .pin = GPIO_PIN0
+    };*/
+    button_t btn =
+        {
+            .attached_pin.port = GPIO_PORTD_INDEX,
+            .attached_pin.logic = GPIO_HIGH,
+            .attached_pin.pin = GPIO_PIN0,
+            .attached_pin.direction = GPIO_DIRECTION_INPUT,
+            .btn_active = BUTTON_ACTIVE_LOW,
+            .btn_state = BUTTON_PRESSED};
+
+    ret = led_initialize(&led1);
+    ret = button_initialize(&btn);
+
+   
     while (1)
     {
-        logic_t l = GPIO_HIGH;
-        gpio_pin_read_logic(&PINC0, &l);
-        if (l == GPIO_HIGH)
+        ret = button_read_state(&btn, &state);
+        if (state == BUTTON_PRESSED)
         {
-            gpio_pin_write_logic(&PINB0,GPIO_HIGH);
+            led_turn_on(&led1);
         }
         else
         {
-            
-            gpio_pin_write_logic(&PINB0,GPIO_LOW);
+            led_turn_off(&led1);
         }
     }
 }

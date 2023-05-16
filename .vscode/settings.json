@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "app.h": "c",
+        "ecu_led.h": "c",
+        "ecu_button.h": "c",
+        "compiler.h": "c"
+    }
+}
