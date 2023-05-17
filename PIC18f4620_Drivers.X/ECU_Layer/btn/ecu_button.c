@@ -16,8 +16,15 @@ Std_ReturnType button_initialize(const button_t *btn)
     }
     else
     {
+        pin_config_t pin = 
+        {
+            .direction = GPIO_DIRECTION_INPUT,
+            .port = btn->port,
+            .pin = btn->pin,
+            .logic = GPIO_HIGH /* NOT USED */
+        };
         /* Do not forget the & */
-        gpio_pin_direction_intialize(&(btn->attached_pin));
+        gpio_pin_direction_intialize(&pin);
     }
     return ret;
 }
@@ -32,7 +39,14 @@ Std_ReturnType button_read_state(const button_t *btn, button_state_t *btn_state)
     else
     {
         logic_t logic = GPIO_HIGH;
-        gpio_pin_read_logic(&(btn->attached_pin), &logic);
+        pin_config_t pin = 
+        {
+            .direction = GPIO_DIRECTION_INPUT,
+            .port = btn->port,
+            .pin = btn->pin,
+            .logic = GPIO_HIGH /* NOT USED */
+        };
+        gpio_pin_read_logic(&pin, &logic);
         if (btn->btn_active == BUTTON_ACTIVE_HIGH)
         {
             if (GPIO_HIGH == logic)

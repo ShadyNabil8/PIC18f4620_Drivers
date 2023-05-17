@@ -27,11 +27,9 @@ void main(void)
     };*/
     button_t btn =
         {
-            .attached_pin.port = GPIO_PORTD_INDEX,
-            .attached_pin.logic = GPIO_HIGH,
-            .attached_pin.pin = GPIO_PIN0,
-            .attached_pin.direction = GPIO_DIRECTION_INPUT,
-            .btn_active = BUTTON_ACTIVE_LOW,
+            .port = GPIO_PORTD_INDEX,
+            .pin = GPIO_PIN0,
+            .btn_active = BUTTON_ACTIVE_HIGH,
             .btn_state = BUTTON_PRESSED};
 
     ret = led_initialize(&led1);
