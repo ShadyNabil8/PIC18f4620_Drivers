@@ -1,9 +1,5 @@
 {
     "files.associations": {
-        "app.h": "c",
-        "ecu_led.h": "c",
-        "ecu_button.h": "c",
-        "compiler.h": "c",
-        "ecu_relay.h": "c"
+        "ecu_dc_motor.h": "c"
     }
 }

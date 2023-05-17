@@ -23,19 +23,19 @@
 /* ----------------- Data Type Declarations -----------------*/
 typedef uint8 button_state_t;
 typedef uint8 button_active_t;
-/*
-typedef enum
-{
-    BUTTON_PRESSED,
-    BUTTON_RELEASED
-} button_state_t;
 
-typedef enum
-{
-    BUTTON_ACTIVE_LOW,
-    BUTTON_ACTIVE_HIGH
-} button_active_t;
-*/
+// typedef enum
+// {
+//     BUTTON_PRESSED,
+//     BUTTON_RELEASED
+// } button_state_t;
+
+// typedef enum
+// {
+//     BUTTON_ACTIVE_LOW,
+//     BUTTON_ACTIVE_HIGH
+// } button_active_t;
+
 typedef struct
 {
     uint8 port : 3;

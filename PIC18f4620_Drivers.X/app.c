@@ -27,9 +27,25 @@ void main(void)
             .pin = GPIO_PIN1,
             .port = GPIO_PORTD_INDEX,
             .relay_state = RELAY_CLOSED};
+
+    motor_t motor =
+        {
+            .pin0 =
+                {
+                    .direction = GPIO_DIRECTION_OUTPUT,
+                    .logic = GPIO_LOW,
+                    .pin = GPIO_PIN2,
+                    .port = GPIO_PORTD_INDEX},
+            .pin1 =
+                {
+                    .direction = GPIO_DIRECTION_OUTPUT,
+                    .logic = GPIO_LOW,
+                    .pin = GPIO_PIN3,
+                    .port = GPIO_PORTD_INDEX}};
     ret = led_initialize(&led1);
     ret = button_initialize(&btn);
     ret = relay_initialize(&relay);
+    ret = motor_initialize(&motor);
 
     while (1)
     {
@@ -38,11 +54,16 @@ void main(void)
         {
             led_turn_on(&led1);
             relay_open(&relay);
+            motor_rotate(&motor, CLOCKWISE);
         }
         else
         {
             led_turn_off(&led1);
             relay_close(&relay);
+            motor_rotate(&motor, ANTICLOCKWISE);
         }
+        __delay_ms(500);
+        motor_stop(&motor);
+        __delay_ms(500);
     }
 }
