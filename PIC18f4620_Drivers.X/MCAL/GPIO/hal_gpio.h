@@ -19,6 +19,11 @@
 #define PORT_MAX_NUMBER 5
 #define PORTC_MASK 0xFF
 
+#define GPIO_LOW 0x00U
+#define GPIO_HIGH 0x01U
+#define GPIO_DIRECTION_OUTPUT 0x00U
+#define GPIO_DIRECTION_INPUT 0x01U
+
 /* Macro function declaration */
 #define HWREG8(_X) (*((volatile uint8 *)(_X)))
 #define SET_BIT(REG, BIT_POSN) (REG |= (BIT_MASK << BIT_POSN))
@@ -27,17 +32,20 @@
 #define READ_BIT(REG, BIT_POSN) ((REG >> BIT_POSN) & BIT_MASK)
 
 /* Section: Data Type Declarations */
-typedef enum
-{
-    GPIO_LOW,
-    GPIO_HIGH
-} logic_t;
+typedef uint8 logic_t;
+typedef uint8 pin_direction_t;
 
-typedef enum
-{
-    GPIO_DIRECTION_OUTPUT,
-    GPIO_DIRECTION_INPUT
-} pin_direction_t;
+// typedef enum
+// {
+//     GPIO_LOW,
+//     GPIO_HIGH
+// } logic_t;
+
+// typedef enum
+// {
+//     GPIO_DIRECTION_OUTPUT,
+//     GPIO_DIRECTION_INPUT
+// } pin_direction_t;
 
 typedef enum
 {

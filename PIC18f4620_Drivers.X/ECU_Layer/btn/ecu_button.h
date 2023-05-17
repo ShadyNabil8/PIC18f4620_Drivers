@@ -13,10 +13,17 @@
 #include "ecu_button_cfg.h"
 
 /* ----------------- Macro Declarations -----------------*/
+#define BUTTON_RELEASED    0x00U
+#define BUTTON_PRESSED     0x01U
+#define BUTTON_ACTIVE_LOW  0x00U
+#define BUTTON_ACTIVE_HIGH 0x01U
 
 /* ----------------- Macro Functions Declarations -----------------*/
 
 /* ----------------- Data Type Declarations -----------------*/
+typedef uint8 button_state_t;
+typedef uint8 button_active_t;
+/*
 typedef enum
 {
     BUTTON_PRESSED,
@@ -28,13 +35,13 @@ typedef enum
     BUTTON_ACTIVE_LOW,
     BUTTON_ACTIVE_HIGH
 } button_active_t;
-
+*/
 typedef struct
 {
-    port_index_t port;
-    pin_posn_t pin;
-    button_state_t btn_state;
-    button_active_t btn_active;
+    uint8 port : 3;
+    uint8 pin : 3;
+    uint8 btn_state : 1;
+    uint8 btn_active : 1;
 } button_t;
 
 /* ----------------- Function Declarations -----------------*/

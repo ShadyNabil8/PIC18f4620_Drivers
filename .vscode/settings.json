@@ -3,6 +3,7 @@
         "app.h": "c",
         "ecu_led.h": "c",
         "ecu_button.h": "c",
-        "compiler.h": "c"
+        "compiler.h": "c",
+        "ecu_relay.h": "c"
     }
 }
