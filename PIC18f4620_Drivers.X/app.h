@@ -15,6 +15,7 @@
 #include "ECU_Layer/btn/ecu_button.h"
 #include "ECU_Layer/relay/ecu_relay.h"
 #include "ECU_Layer/dc_motor/ecu_dc_motor.h"
+#include "ECU_Layer/KeyPad/ecu_keypad.h"
 
 #endif	/* APP_H */
 

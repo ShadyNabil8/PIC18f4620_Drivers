@@ -13,6 +13,10 @@
           <itemPath>ECU_Layer/dc_motor/ecu_dc_motor.h</itemPath>
           <itemPath>ECU_Layer/dc_motor/ecu_dc_motor_cfg.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="KeyPad" displayName="KeyPad" projectFiles="true">
+          <itemPath>ECU_Layer/KeyPad/ecu_keypad.h</itemPath>
+          <itemPath>ECU_Layer/KeyPad/ecu_keypad_cfg.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="LED" displayName="LED" projectFiles="true">
           <itemPath>ECU_Layer/LED/ecu_led.h</itemPath>
           <itemPath>ECU_Layer/LED/ecu_led_cfg.h</itemPath>
@@ -28,6 +32,7 @@
           <itemPath>MCAL/GPIO/hal_gpio_cfg.h</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <itemPath>ECU_Layer/ecu_layer_init.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -43,6 +48,9 @@
         <logicalFolder name="dc_motor" displayName="dc_motor" projectFiles="true">
           <itemPath>ECU_Layer/dc_motor/ecu_dc_motor.c</itemPath>
         </logicalFolder>
+        <logicalFolder name="KeyPad" displayName="KeyPad" projectFiles="true">
+          <itemPath>ECU_Layer/KeyPad/ecu_keypad.c</itemPath>
+        </logicalFolder>
         <logicalFolder name="LED" displayName="LED" projectFiles="true">
           <itemPath>ECU_Layer/LED/ecu_led.c</itemPath>
         </logicalFolder>
@@ -55,6 +63,7 @@
           <itemPath>MCAL/GPIO/hal_gpio.c</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <itemPath>ECU_Layer/ecu_layer_init.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
