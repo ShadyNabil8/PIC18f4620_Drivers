@@ -2,6 +2,8 @@
     "files.associations": {
         "app.h": "c",
         "ecu_keypad.h": "c",
-        "hal_gpio.h": "c"
+        "hal_gpio.h": "c",
+        "ecu_char_lcd.h": "c",
+        "mcal_std_types.h": "c"
     }
 }

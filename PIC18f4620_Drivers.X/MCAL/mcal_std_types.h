@@ -10,6 +10,7 @@
 
 /* Includes */
 #include "compiler.h"
+#include "std_libraries.h"
 
 
 /* Data types declarations */

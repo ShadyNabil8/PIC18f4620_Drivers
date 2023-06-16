@@ -8,25 +8,49 @@
 #include "app.h"
 
 // button_state_t state = BUTTON_PRESSED;
-keypad_t keypad;
-uint8 val = 0;
+// keypad_t keypad;
+// uint8 val = 0;
+char_lcd_4bit_t lcd;
 void main(void)
 {
     Std_ReturnType ret;
-    for (int i = 0; i < 4; i++)
+
+    lcd.lcd_rs.direction = GPIO_DIRECTION_OUTPUT;
+    lcd.lcd_rs.logic = GPIO_LOW;
+    lcd.lcd_rs.pin = GPIO_PIN0;
+    lcd.lcd_rs.port = GPIO_PORTC_INDEX;
+
+    lcd.lcd_en.direction = GPIO_DIRECTION_OUTPUT;
+    lcd.lcd_en.logic = GPIO_LOW;
+    lcd.lcd_en.pin = GPIO_PIN1;
+    lcd.lcd_en.port = GPIO_PORTC_INDEX;
+
+    for (int lcd_data_pins = 0; lcd_data_pins < 4; lcd_data_pins++)
     {
-        keypad.rows_pins[i].direction = GPIO_DIRECTION_OUTPUT;
-        keypad.rows_pins[i].logic = GPIO_LOW;
-        keypad.rows_pins[i].pin = (uint8)i;
-        keypad.rows_pins[i].port = GPIO_PORTD_INDEX;
+        lcd.lcd_data[lcd_data_pins].direction = GPIO_DIRECTION_OUTPUT;
+        lcd.lcd_data[lcd_data_pins].logic = GPIO_LOW;
+        lcd.lcd_data[lcd_data_pins].pin = (uint8)(lcd_data_pins + 2);
+        lcd.lcd_data[lcd_data_pins].port = GPIO_PORTC_INDEX;
+    }
 
-        keypad.columns_pins[i].direction = GPIO_DIRECTION_INPUT;
-        keypad.columns_pins[i].logic = GPIO_LOW;
-        keypad.columns_pins[i].pin = (uint8)(i+4);
-        keypad.columns_pins[i].port = GPIO_PORTD_INDEX;
-    };
+    lcd_4bit_intialize(&lcd);
+    lcd_4bit_send_char_data(&lcd,'S');
+    
 
-    keypad_initialize(&keypad);
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     keypad.rows_pins[i].direction = GPIO_DIRECTION_OUTPUT;
+    //     keypad.rows_pins[i].logic = GPIO_LOW;
+    //     keypad.rows_pins[i].pin = (uint8)i;
+    //     keypad.rows_pins[i].port = GPIO_PORTD_INDEX;
+
+    //     keypad.columns_pins[i].direction = GPIO_DIRECTION_INPUT;
+    //     keypad.columns_pins[i].logic = GPIO_LOW;
+    //     keypad.columns_pins[i].pin = (uint8)(i+4);
+    //     keypad.columns_pins[i].port = GPIO_PORTD_INDEX;
+    // };
+
+    // keypad_initialize(&keypad);
     // led_t led1 =
     //     {
     //         .port = GPIO_PORTA_INDEX,
@@ -65,7 +89,7 @@ void main(void)
 
     while (1)
     {
-        keypad_get_value(&keypad,&val);
+        // keypad_get_value(&keypad,&val);
         // ret = button_read_state(&btn, &state);
         // if (state == BUTTON_PRESSED)
         // {
