@@ -35,6 +35,11 @@
           <itemPath>MCAL/GPIO/hal_gpio.h</itemPath>
           <itemPath>MCAL/GPIO/hal_gpio_cfg.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="interrupts" displayName="interrupts" projectFiles="true">
+          <itemPath>MCAL/interrupts/mcal_interrupts_cfg.h</itemPath>
+          <itemPath>MCAL/interrupts/mcal_external_interrupts.h</itemPath>
+          <itemPath>MCAL/interrupts/mcal_ISRs.h</itemPath>
+        </logicalFolder>
         <itemPath>MCAL/std_libraries.h</itemPath>
       </logicalFolder>
       <itemPath>ECU_Layer/ecu_layer_init.h</itemPath>
@@ -69,6 +74,10 @@
       <logicalFolder name="MCAL" displayName="MCAL" projectFiles="true">
         <logicalFolder name="GPIO" displayName="GPIO" projectFiles="true">
           <itemPath>MCAL/GPIO/hal_gpio.c</itemPath>
+        </logicalFolder>
+        <logicalFolder name="interrupts" displayName="interrupts" projectFiles="true">
+          <itemPath>MCAL/interrupts/mcal_ISRs.c</itemPath>
+          <itemPath>MCAL/interrupts/mcal_external_interrupts.c</itemPath>
         </logicalFolder>
       </logicalFolder>
       <itemPath>ECU_Layer/ecu_layer_init.c</itemPath>
