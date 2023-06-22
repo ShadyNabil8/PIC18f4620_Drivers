@@ -5,6 +5,10 @@
  * Created on June 20, 2023, 1:35 PM
  */
 #include "mcal_ISRs.h"
+
+// static void INTx_checker(void);
+// static void RBx_checker(void);
+
 #if INTERRUPTS_PRIORITY_LEVELS_ENEBLE
 void __interrupt() InterruptManagerHigh(void)
 {
@@ -29,6 +33,47 @@ void __interrupt() InterruptManagerHigh(void)
     else
     { /* Nothing */
     }
+    if (INTCON2bits.RBIP == INTERRUPTS_HIGH_PRIORITY)
+    {
+        if (previousRBxFlags != (PORTB & 0xF0))
+        {
+            // 10000000
+            // 00000000
+            if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB4_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB5_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB6_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB7_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            previousRBxFlags = PORTB & 0xF0;
+        }
+    }
 }
 
 void __interrupt(low_priority) InterruptManagerLow(void)
@@ -46,6 +91,47 @@ void __interrupt(low_priority) InterruptManagerLow(void)
     }
     else
     { /* Nothing */
+    }
+    if (INTCON2bits.RBIP == INTERRUPTS_LOW_PRIORITY)
+    {
+        if (previousRBxFlags != (PORTB & 0xF0))
+        {
+            // 10000000
+            // 00000000
+            if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB4_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB5_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB6_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+            {
+                volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+                RB7_ISR();
+            }
+            else
+            { /* Nothing */
+            }
+            previousRBxFlags = PORTB & 0xF0;
+        }
     }
 }
 #else
@@ -68,6 +154,44 @@ void __interrupt() InterruptManager(void)
         INT2_ISR(); /* External Interrupt 0 */
     }
     { /* Nothing */
+    }
+    if (previousRBxFlags != (PORTB & 0xF0))
+    {
+        // 10000000
+        // 00000000
+        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+        {
+            volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+            RB4_ISR();
+        }
+        else
+        { /* Nothing */
+        }
+        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+        {
+            volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+            RB5_ISR();
+        }
+        else
+        { /* Nothing */
+        }
+        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+        {
+            volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+            RB6_ISR();
+        }
+        else
+        { /* Nothing */
+        }
+        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENEBLE == INTCONbits.RBIE) && (INTERRUPTS_ENEBLE == INTCONbits.RBIF))
+        {
+            volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
+            RB7_ISR();
+        }
+        else
+        { /* Nothing */
+        }
+        previousRBxFlags = PORTB & 0xF0;
     }
 }
 

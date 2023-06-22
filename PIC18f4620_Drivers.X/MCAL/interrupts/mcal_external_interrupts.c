@@ -6,11 +6,12 @@
  */
 
 #include "mcal_external_interrupts.h"
-
-/* ------------------------------ HELPER FUNCTIONS ------------------------------*/
-static InterruptHandler INT0_handler = NULL;
-static InterruptHandler INT1_handler = NULL;
-static InterruptHandler INT2_handler = NULL;
+volatile uint8 previousRBxFlags;
+// static InterruptHandler INT0_handler = NULL;
+// static InterruptHandler INT1_handler = NULL;
+// static InterruptHandler INT2_handler = NULL;
+static InterruptHandler INTx_HandlerArr[3] = {NULL, NULL, NULL};
+static InterruptHandler RBx_HandlerArr[4] = {NULL, NULL, NULL, NULL};
 
 static Std_ReturnType interrupts_INTx_enable(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_disable(const interrupts_INTx_t *INTx_obj);
@@ -18,11 +19,19 @@ static Std_ReturnType interrupts_INTx_priority_init(const interrupts_INTx_t *INT
 static Std_ReturnType interrupts_INTx_edge_init(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_pin_init(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_clear_flag(const interrupts_INTx_t *INTx_obj);
-
 static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj);
+
+static Std_ReturnType interrupts_RBx_enable(const interrupts_RBx_t *RBx_obj);
+static Std_ReturnType interrupts_RBx_disable(const interrupts_RBx_t *RBx_obj);
+static Std_ReturnType interrupts_RBx_priority_init(const interrupts_RBx_t *RBx_obj);
+static Std_ReturnType interrupts_RBx_pin_init(const interrupts_RBx_t *RBx_obj);
+static Std_ReturnType interrupts_RBx_clear_flag(const interrupts_RBx_t *RBx_obj);
+static Std_ReturnType interrupts_RBx_ISR_init(const interrupts_RBx_t *RBx_obj);
 // static Std_ReturnType interrupts_INT0_ISR_init(const interrupts_INTx_t *INTx_obj);
 // static Std_ReturnType interrupts_INT1_ISR_init(const interrupts_INTx_t *INTx_obj);
 // static Std_ReturnType interrupts_INT2_ISR_init(const interrupts_INTx_t *INTx_obj);
+
+/********************************************* INTx *********************************************/
 
 Std_ReturnType interrupts_INTx_init(const interrupts_INTx_t *INTx_obj)
 {
@@ -323,15 +332,6 @@ static Std_ReturnType interrupts_INTx_clear_flag(const interrupts_INTx_t *INTx_o
     }
     return ret;
 }
-// static Std_ReturnType interrupts_INT0_ISR_init(const interrupts_INTx_t *INTx_obj)
-// {
-// }
-// static Std_ReturnType interrupts_INT1_ISR_init(const interrupts_INTx_t *INTx_obj)
-// {
-// }
-// static Std_ReturnType interrupts_INT2_ISR_init(const interrupts_INTx_t *INTx_obj)
-// {
-// }
 static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj)
 {
     Std_ReturnType ret = E_OK;
@@ -341,20 +341,171 @@ static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj
     }
     else
     {
-        switch (INTx_obj->interrupt_src)
+        INTx_HandlerArr[INTx_obj->interrupt_src] = INTx_obj->INTx_handler;
+        // switch (INTx_obj->interrupt_src)
+        // {
+        // case INTERRUPTS_INT0:
+        //     INT0_handler = INTx_obj->INTx_handler;
+        //     break;
+
+        // case INTERRUPTS_INT1:
+        //     INT1_handler = INTx_obj->INTx_handler;
+        //     break;
+
+        // case INTERRUPTS_INT2:
+        //     INT2_handler = INTx_obj->INTx_handler;
+        //     break;
+        // }
+    }
+    return ret;
+}
+
+/********************************************* RBx *********************************************/
+
+Std_ReturnType interrupts_RBx_init(const interrupts_RBx_t *RBx_obj)
+{
+    previousRBxFlags = PORTB;
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        ret = interrupts_RBx_disable(RBx_obj);
+        ret &= interrupts_RBx_pin_init(RBx_obj);
+        ret &= interrupts_RBx_clear_flag(RBx_obj);
+#if INTERRUPTS_PRIORITY_LEVELS_ENEBLE
+        ret &= interrupts_RBx_priority_init(RBx_obj);
+#endif
+        ret &= interrupts_RBx_ISR_init(RBx_obj);
+        ret &= interrupts_RBx_enable(RBx_obj);
+    }
+    return ret;
+}
+Std_ReturnType interrupts_RBx_deinit(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        ret = interrupts_RBx_disable(RBx_obj);
+    }
+    return ret;
+}
+
+static Std_ReturnType interrupts_RBx_enable(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+#if INTERRUPTS_PRIORITY_LEVELS_ENEBLE
+        interrputs_priority_levels_enable();
+        if (RBx_obj->interrupt_priority == INTERRUPTS_HIGH_PRIORITY)
         {
-        case INTERRUPTS_INT0:
-            INT0_handler = INTx_obj->INTx_handler;
-            break;
-
-        case INTERRUPTS_INT1:
-            INT1_handler = INTx_obj->INTx_handler;
-            break;
-
-        case INTERRUPTS_INT2:
-            INT2_handler = INTx_obj->INTx_handler;
-            break;
+            interrputs_high_priority_interrupt_eneble();
         }
+        else if (RBx_obj->interrupt_priority == INTERRUPTS_LOW_PRIORITY)
+        {
+            interrputs_low_priority_interrupt_eneble();
+        }
+        else
+        {
+            ret = E_NOT_OK;
+        }
+#else
+
+        interrputs_global_interrupt_eneble();
+        interrputs_peripheral_interrupt_enable();
+
+#endif
+
+        interrputs_RBx_enable_macro();
+    }
+    return ret;
+}
+static Std_ReturnType interrupts_RBx_disable(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        interrputs_RBx_disable_macro();
+    }
+    return ret;
+}
+#if INTERRUPTS_PRIORITY_LEVELS_ENEBLE
+static Std_ReturnType interrupts_RBx_priority_init(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        if (RBx_obj->interrupt_priority == INTERRUPTS_HIGH_PRIORITY)
+        {
+            interrputs_RBx_apply_high_priority();
+        }
+        else if (RBx_obj->interrupt_priority == INTERRUPTS_LOW_PRIORITY)
+        {
+            interrputs_RBx_apply_low_priority();
+        }
+        else
+        {
+            ret = E_NOT_OK;
+        }
+    }
+    return ret;
+}
+#endif
+static Std_ReturnType interrupts_RBx_pin_init(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        ret = gpio_pin_direction_intialize(&(RBx_obj->attached_pin));
+    }
+    return ret;
+}
+static Std_ReturnType interrupts_RBx_clear_flag(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        interrputs_RBx_clear_flag_macro();
+    }
+    return ret;
+}
+static Std_ReturnType interrupts_RBx_ISR_init(const interrupts_RBx_t *RBx_obj)
+{
+    Std_ReturnType ret = E_OK;
+    if (NULL == RBx_obj)
+    {
+        ret = E_NOT_OK;
+    }
+    else
+    {
+        RBx_HandlerArr[RBx_obj->interrupt_src] = RBx_obj->INTx_handler;
     }
     return ret;
 }
@@ -362,33 +513,105 @@ static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj
 void INT0_ISR(void)
 {
     interrputs_INT0_clear_flag();
-    if (INT0_handler)
+    if (INTx_HandlerArr[INTERRUPTS_INT0])
     {
-        INT0_handler();
+        (INTx_HandlerArr[INTERRUPTS_INT0])();
     }
     else
     {
         /* Nothing*/
     }
+    // if (INT0_handler)
+    // {
+    //     INT0_handler();
+    // }
+    // else
+    // {
+    //     /* Nothing*/
+    // }
 }
 void INT1_ISR(void)
 {
     interrputs_INT1_clear_flag();
-    if (INT1_handler)
+    if (INTx_HandlerArr[INTERRUPTS_INT1])
     {
-        INT1_handler();
+        (INTx_HandlerArr[INTERRUPTS_INT1])();
+    }
+    else
+    {
+        /* Nothing*/
+    }
+    // if (INT1_handler)
+    // {
+    //     INT1_handler();
+    // }
+    // else
+    // {
+    //     /* Nothing*/
+    // }
+}
+void INT2_ISR(void)
+{
+    interrputs_INT2_clear_flag();
+    if (INTx_HandlerArr[INTERRUPTS_INT2])
+    {
+        (INTx_HandlerArr[INTERRUPTS_INT2])();
+    }
+    else
+    {
+        /* Nothing*/
+    }
+    // if (INT2_handler)
+    // {
+    //     INT2_handler();
+    // }
+    // else
+    // {
+    //     /* Nothing*/
+    // }
+}
+void RB4_ISR(void)
+{
+    interrputs_RBx_clear_flag_macro();
+    if (RBx_HandlerArr[INTERRUPTS_RB4])
+    {
+        (RBx_HandlerArr[INTERRUPTS_RB4])();
     }
     else
     {
         /* Nothing*/
     }
 }
-void INT2_ISR(void)
+void RB5_ISR(void)
 {
-    interrputs_INT2_clear_flag();
-    if (INT2_handler)
+    interrputs_RBx_clear_flag_macro();
+    if (RBx_HandlerArr[INTERRUPTS_RB5])
     {
-        INT2_handler();
+        (RBx_HandlerArr[INTERRUPTS_RB5])();
+    }
+    else
+    {
+        /* Nothing*/
+    }
+}
+void RB6_ISR(void)
+{
+    interrputs_RBx_clear_flag_macro();
+    if (RBx_HandlerArr[INTERRUPTS_RB6])
+    {
+        (RBx_HandlerArr[INTERRUPTS_RB6])();
+    }
+    else
+    {
+        /* Nothing*/
+    }
+}
+void RB7_ISR(void)
+{
+    interrputs_RBx_clear_flag_macro();
+    if (RBx_HandlerArr[INTERRUPTS_RB7])
+    {
+        (RBx_HandlerArr[INTERRUPTS_RB7])();
     }
     else
     {
