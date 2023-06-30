@@ -9,6 +9,8 @@
         "hal_gpio_cfg.h": "c",
         "compiler.h": "c",
         "std_libraries.h": "c",
-        "mcal_interrupts_cfg.h": "c"
+        "mcal_interrupts_cfg.h": "c",
+        "mcal_external_interrupts.h": "c",
+        "hal_adc.h": "c"
     }
 }

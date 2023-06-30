@@ -17,7 +17,8 @@
 #include "ECU_Layer/relay/ecu_relay.h"
 #include "ECU_Layer/dc_motor/ecu_dc_motor.h"
 #include "ECU_Layer/KeyPad/ecu_keypad.h"
-#include "ECU_Layer/char_lcd\ecu_char_lcd.h"
+#include "ECU_Layer/char_lcd/ecu_char_lcd.h"
+#include "MCAL/ADC/hal_adc.h"
 
 #endif	/* APP_H */
 

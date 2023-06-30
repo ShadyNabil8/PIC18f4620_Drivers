@@ -31,6 +31,10 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="MCAL" displayName="MCAL" projectFiles="true">
+        <logicalFolder name="ADC" displayName="ADC" projectFiles="true">
+          <itemPath>MCAL/ADC/hal_adc.h</itemPath>
+          <itemPath>MCAL/ADC/hal_adc_cfg.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="GPIO" displayName="GPIO" projectFiles="true">
           <itemPath>MCAL/GPIO/hal_gpio.h</itemPath>
           <itemPath>MCAL/GPIO/hal_gpio_cfg.h</itemPath>
@@ -39,6 +43,7 @@
           <itemPath>MCAL/interrupts/mcal_interrupts_cfg.h</itemPath>
           <itemPath>MCAL/interrupts/mcal_external_interrupts.h</itemPath>
           <itemPath>MCAL/interrupts/mcal_ISRs.h</itemPath>
+          <itemPath>MCAL/interrupts/mcal_peripheral_interrupts.h</itemPath>
         </logicalFolder>
         <itemPath>MCAL/std_libraries.h</itemPath>
       </logicalFolder>
@@ -72,6 +77,9 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="MCAL" displayName="MCAL" projectFiles="true">
+        <logicalFolder name="ADC" displayName="ADC" projectFiles="true">
+          <itemPath>MCAL/ADC/hal_adc.c</itemPath>
+        </logicalFolder>
         <logicalFolder name="GPIO" displayName="GPIO" projectFiles="true">
           <itemPath>MCAL/GPIO/hal_gpio.c</itemPath>
         </logicalFolder>

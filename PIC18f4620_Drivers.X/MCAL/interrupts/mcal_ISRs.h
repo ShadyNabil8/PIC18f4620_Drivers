@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   mcal_ISRs.h
  * Author: shady
  *
@@ -6,7 +6,7 @@
  */
 
 #ifndef MCAL_ISRS_H
-#define	MCAL_ISRS_H
+#define MCAL_ISRS_H
 
 /* ----------------- Includes -----------------*/
 #include "mcal_interrupts_cfg.h"
@@ -30,6 +30,6 @@ void RB4_ISR(void);
 void RB5_ISR(void);
 void RB6_ISR(void);
 void RB7_ISR(void);
+void ADC_ISR(void);
 
-#endif	/* MCAL_ISRS_H */
-
+#endif /* MCAL_ISRS_H */

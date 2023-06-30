@@ -8,9 +8,9 @@
  * YOU CAN NOT MAKE A NESTED INTERRUPTES USING RBx INTERRUPTS (DO NO DO THIS).
  * IF YOU DID, ANY PENDING INTERRUPTS WILL BE IGNORED.
  * DO NOT FORGET THAT THE RBx INTERRUPTS HAS ONLY ONE PERIORITY I.E., ALL FROM RB4->RB7 IS HIGH OR ALL IS LOW
- * 
- * 
-*/
+ *
+ *
+ */
 
 #ifndef MCAL_EXTERNAL_INTERRUPTS_H
 #define MCAL_EXTERNAL_INTERRUPTS_H
@@ -25,25 +25,34 @@
 #define INTERRUPTS_RB7 3
 
 /* ----------------- Macro Functions Declarations -----------------*/
-#define interrputs_INT0_enable() (INTCONbits.INT0IE = INTERRUPTS_ENEBLE)
+
+/*
+ * To make the INTx pins as digital pins.
+ * This line make enables all INXx and RBx interrupts.
+ * AN0 AN1 AN2 AN3 AN4 AN5 AN6 AN7 AN8 AN9 AN10 AN11 AN12 
+ * A   A   D   D   D   D   D   D   D   D   D     D    D
+*/
+#define interrputs_INTx_digital_pins() (ADCON1bits.PCFG = 0X0D);
+
+#define interrputs_INT0_enable() (INTCONbits.INT0IE = INTERRUPTS_ENABLE)
 #define interrputs_INT0_disable() (INTCONbits.INT0IE = INTERRUPTS_DISABLE)
 #define interrputs_INT0_clear_flag() (INTCONbits.INT0IF = INTERRUPTS_DISABLE)
 #define interrputs_INT0_apply_rising_edge() (INTCON2bits.INTEDG0 = INTERRUPTS_RISING_EDGE)
 #define interrputs_INT0_apply_falling_edge() (INTCON2bits.INTEDG0 = INTERRUPTS_FALLING_EDGE)
 
-#define interrputs_INT1_enable() (INTCON3bits.INT1IE = INTERRUPTS_ENEBLE)
+#define interrputs_INT1_enable() (INTCON3bits.INT1IE = INTERRUPTS_ENABLE)
 #define interrputs_INT1_disable() (INTCON3bits.INT1IE = INTERRUPTS_DISABLE)
 #define interrputs_INT1_clear_flag() (INTCON3bits.INT1IF = INTERRUPTS_DISABLE)
 #define interrputs_INT1_apply_rising_edge() (INTCON2bits.INTEDG1 = INTERRUPTS_RISING_EDGE)
 #define interrputs_INT1_apply_falling_edge() (INTCON2bits.INTEDG1 = INTERRUPTS_FALLING_EDGE)
 
-#define interrputs_INT2_enable() (INTCON3bits.INT2IE = INTERRUPTS_ENEBLE)
+#define interrputs_INT2_enable() (INTCON3bits.INT2IE = INTERRUPTS_ENABLE)
 #define interrputs_INT2_disable() (INTCON3bits.INT2IE = INTERRUPTS_DISABLE)
 #define interrputs_INT2_clear_flag() (INTCON3bits.INT2IF = INTERRUPTS_DISABLE)
 #define interrputs_INT2_apply_rising_edge() (INTCON2bits.INTEDG2 = INTERRUPTS_RISING_EDGE)
 #define interrputs_INT2_apply_falling_edge() (INTCON2bits.INTEDG2 = INTERRUPTS_FALLING_EDGE)
 
-#define interrputs_RBx_enable_macro() (INTCONbits.RBIE = INTERRUPTS_ENEBLE)
+#define interrputs_RBx_enable_macro() (INTCONbits.RBIE = INTERRUPTS_ENABLE)
 #define interrputs_RBx_disable_macro() (INTCONbits.RBIE = INTERRUPTS_DISABLE)
 #define interrputs_RBx_clear_flag_macro() (INTCONbits.RBIF = INTERRUPTS_DISABLE)
 
@@ -82,7 +91,7 @@ typedef struct
     interrupts_edge_t interrupt_edge;
     pin_config_t attached_pin;
     interrupts_priority_t interrupt_priority;
-    InterruptHandler INTx_handler;
+    InterruptHandler_t INTx_handler;
 } interrupts_INTx_t;
 
 typedef struct
@@ -90,7 +99,7 @@ typedef struct
     interrupts_RBx_src_t interrupt_src;
     pin_config_t attached_pin;
     interrupts_priority_t interrupt_priority;
-    InterruptHandler INTx_handler;
+    InterruptHandler_t INTx_handler;
 } interrupts_RBx_t;
 
 /* ----------------- Software Interfaces Declarations -----------------*/

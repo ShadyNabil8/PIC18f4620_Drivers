@@ -6,13 +6,12 @@
  */
 
 #include "mcal_external_interrupts.h"
-volatile uint8 previousRBxFlags;
-// static InterruptHandler INT0_handler = NULL;
-// static InterruptHandler INT1_handler = NULL;
-// static InterruptHandler INT2_handler = NULL;
-static InterruptHandler INTx_HandlerArr[3] = {NULL, NULL, NULL};
-static InterruptHandler RBx_HandlerArr[4] = {NULL, NULL, NULL, NULL};
 
+// static InterruptHandler_t INT0_handler = NULL;
+// static InterruptHandler_t INT1_handler = NULL;
+// static InterruptHandler_t INT2_handler = NULL;
+#if INTERRUPTS_INTx_ENEBLE
+static InterruptHandler_t INTx_HandlerArr[3] = {NULL, NULL, NULL};
 static Std_ReturnType interrupts_INTx_enable(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_disable(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_priority_init(const interrupts_INTx_t *INTx_obj);
@@ -20,7 +19,11 @@ static Std_ReturnType interrupts_INTx_edge_init(const interrupts_INTx_t *INTx_ob
 static Std_ReturnType interrupts_INTx_pin_init(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_clear_flag(const interrupts_INTx_t *INTx_obj);
 static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj);
+#endif
 
+#if INTERRUPTS_RBx_ENEBLE
+volatile uint8 previousRBxFlags;
+static InterruptHandler_t RBx_HandlerArr[4] = {NULL, NULL, NULL, NULL};
 static Std_ReturnType interrupts_RBx_enable(const interrupts_RBx_t *RBx_obj);
 static Std_ReturnType interrupts_RBx_disable(const interrupts_RBx_t *RBx_obj);
 static Std_ReturnType interrupts_RBx_priority_init(const interrupts_RBx_t *RBx_obj);
@@ -30,9 +33,10 @@ static Std_ReturnType interrupts_RBx_ISR_init(const interrupts_RBx_t *RBx_obj);
 // static Std_ReturnType interrupts_INT0_ISR_init(const interrupts_INTx_t *INTx_obj);
 // static Std_ReturnType interrupts_INT1_ISR_init(const interrupts_INTx_t *INTx_obj);
 // static Std_ReturnType interrupts_INT2_ISR_init(const interrupts_INTx_t *INTx_obj);
-
+#endif
 /********************************************* INTx *********************************************/
 
+#if INTERRUPTS_INTx_ENEBLE
 Std_ReturnType interrupts_INTx_init(const interrupts_INTx_t *INTx_obj)
 {
     Std_ReturnType ret = E_OK;
@@ -42,6 +46,7 @@ Std_ReturnType interrupts_INTx_init(const interrupts_INTx_t *INTx_obj)
     }
     else
     {
+        interrputs_INTx_digital_pins();
         ret = interrupts_INTx_disable(INTx_obj);
         ret &= interrupts_INTx_edge_init(INTx_obj);
         ret &= interrupts_INTx_pin_init(INTx_obj);
@@ -359,9 +364,9 @@ static Std_ReturnType interrupts_INTx_ISR_init(const interrupts_INTx_t *INTx_obj
     }
     return ret;
 }
-
+#endif
 /********************************************* RBx *********************************************/
-
+#if INTERRUPTS_RBx_ENEBLE
 Std_ReturnType interrupts_RBx_init(const interrupts_RBx_t *RBx_obj)
 {
     previousRBxFlags = PORTB;
@@ -509,7 +514,8 @@ static Std_ReturnType interrupts_RBx_ISR_init(const interrupts_RBx_t *RBx_obj)
     }
     return ret;
 }
-
+#endif
+#if INTERRUPTS_INTx_ENEBLE
 void INT0_ISR(void)
 {
     interrputs_INT0_clear_flag();
@@ -570,6 +576,8 @@ void INT2_ISR(void)
     //     /* Nothing*/
     // }
 }
+#endif
+#if INTERRUPTS_RBx_ENEBLE
 void RB4_ISR(void)
 {
     interrputs_RBx_clear_flag_macro();
@@ -618,3 +626,4 @@ void RB7_ISR(void)
         /* Nothing*/
     }
 }
+#endif
