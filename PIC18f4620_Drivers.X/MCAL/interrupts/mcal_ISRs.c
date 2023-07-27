@@ -13,7 +13,7 @@
 void __interrupt() InterruptManagerHigh(void)
 {
 #if INTERRUPTS_INTx_ENEBLE
-    if ((INTERRUPTS_ENABLE == INTCONbits.INT0IE) && (INTERRUPTS_ENABLE == INTCONbits.INT0IF))
+    if (INTERRUPTS_ENABLE == INTCONbits.INT0IF)
     {
         INT0_ISR();
     }
@@ -21,7 +21,7 @@ void __interrupt() InterruptManagerHigh(void)
     { /* Nothing */
     }
 #if INTERRUPTS_INT1_HIGH_PRIORITY
-    if ((INTCON3bits.INT1IP == INTERRUPTS_HIGH_PRIORITY) && (INTERRUPTS_ENABLE == INTCON3bits.INT1E) && (INTERRUPTS_ENABLE == INTCON3bits.INT1F))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT1F)
     {
         INT1_ISR();
     }
@@ -30,7 +30,7 @@ void __interrupt() InterruptManagerHigh(void)
     }
 #endif
 #if INTERRUPTS_INT2_HIGH_PRIORITY
-    if ((INTCON3bits.INT2IP == INTERRUPTS_HIGH_PRIORITY) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IE) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IF))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT2IF)
     {
         INT2_ISR();
     }
@@ -51,7 +51,7 @@ void __interrupt() InterruptManagerHigh(void)
          * HAAAAAAAAAAAAAAAAAAY SHADY, MAKE A #DEFINE TO CHOSE THE RBx THAT YOU USED AND NEGLECT THE OTHERS
          * ALSO REMOVE (INTCON3bits.INT2IP == INTERRUPTS_HIGH_PRIORITY) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IE) AND SO ON
          */
-        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB4_ISR();
@@ -59,7 +59,7 @@ void __interrupt() InterruptManagerHigh(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB5_ISR();
@@ -67,7 +67,7 @@ void __interrupt() InterruptManagerHigh(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB6_ISR();
@@ -75,7 +75,7 @@ void __interrupt() InterruptManagerHigh(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB7_ISR();
@@ -102,13 +102,24 @@ void __interrupt() InterruptManagerHigh(void)
     }
 #endif
 #endif
+#if INTERRUPTS_TIMER0_ENEBLE
+#if INTERRUPTS_TIMER0_HIGH_PRIORITY
+    if (INTERRUPTS_ENABLE == INTCONbits.TMR0IF)
+    {
+        timer0_ISR();
+    }
+    else
+    { /* Nothing */
+    }
+#endif
+#endif
 }
 
 void __interrupt(low_priority) InterruptManagerLow(void)
 {
 #if INTERRUPTS_INTx_ENEBLE
 #if !INTERRUPTS_INT1_HIGH_PRIORITY
-    if ((INTCON3bits.INT1IP == INTERRUPTS_LOW_PRIORITY) && (INTERRUPTS_ENABLE == INTCON3bits.INT1E) && (INTERRUPTS_ENABLE == INTCON3bits.INT1F))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT1F)
     {
         INT1_ISR();
     }
@@ -117,7 +128,7 @@ void __interrupt(low_priority) InterruptManagerLow(void)
     }
 #endif
 #if !INTERRUPTS_INT2_HIGH_PRIORITY
-    if ((INTCON3bits.INT2IP == INTERRUPTS_LOW_PRIORITY) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IE) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IF))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT2IF)
     {
         INT2_ISR();
     }
@@ -132,7 +143,7 @@ void __interrupt(low_priority) InterruptManagerLow(void)
     {
         // 10000000
         // 00000000
-        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB4_ISR();
@@ -140,7 +151,7 @@ void __interrupt(low_priority) InterruptManagerLow(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB5_ISR();
@@ -148,7 +159,7 @@ void __interrupt(low_priority) InterruptManagerLow(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB6_ISR();
@@ -156,7 +167,7 @@ void __interrupt(low_priority) InterruptManagerLow(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB7_ISR();
@@ -182,24 +193,35 @@ void __interrupt(low_priority) InterruptManagerLow(void)
     }
 #endif
 #endif
+#if INTERRUPTS_TIMER0_ENEBLE
+#if !INTERRUPTS_TIMER0_HIGH_PRIORITY
+    if (INTERRUPTS_ENABLE == INTCONbits.TMR0IF)
+    {
+        timer0_ISR();
+    }
+    else
+    { /* Nothing */
+    }
+#endif
+#endif
 }
 #else
 void __interrupt() InterruptManager(void)
 {
 #if INTERRUPTS_INTx_ENEBLE
-    if ((INTERRUPTS_ENABLE == INTCONbits.INT0IE) && (INTERRUPTS_ENABLE == INTCONbits.INT0IF))
+    if (INTERRUPTS_ENABLE == INTCONbits.INT0IF)
     {
         INT0_ISR(); /* External Interrupt 0 */
     }
     { /* Nothing */
     }
-    if ((INTERRUPTS_ENABLE == INTCON3bits.INT1IE) && (INTERRUPTS_ENABLE == INTCON3bits.INT1IF))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT1IF)
     {
         INT1_ISR(); /* External Interrupt 0 */
     }
     { /* Nothing */
     }
-    if ((INTERRUPTS_ENABLE == INTCON3bits.INT2IE) && (INTERRUPTS_ENABLE == INTCON3bits.INT2IF))
+    if (INTERRUPTS_ENABLE == INTCON3bits.INT2IF)
     {
         INT2_ISR(); /* External Interrupt 0 */
     }
@@ -212,7 +234,7 @@ void __interrupt() InterruptManager(void)
     {
         // 10000000
         // 00000000
-        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB4_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB4_ISR();
@@ -220,7 +242,7 @@ void __interrupt() InterruptManager(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB5_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB5_ISR();
@@ -228,7 +250,7 @@ void __interrupt() InterruptManager(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB6_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB6_ISR();
@@ -236,7 +258,7 @@ void __interrupt() InterruptManager(void)
         else
         { /* Nothing */
         }
-        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIE) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
+        if ((INTERRUPTS_RB7_FLAG == (previousRBxFlags ^ (PORTB & 0xF0))) && (INTERRUPTS_ENABLE == INTCONbits.RBIF))
         {
             volatile uint8_t dummy = PORTB; // Read PORTB to end mismatch condition
             RB7_ISR();
@@ -254,6 +276,15 @@ void __interrupt() InterruptManager(void)
     if (INTERRUPTS_ENABLE == PIR1bits.ADIF)
     {
         ADC_ISR();
+    }
+    else
+    { /* Nothing */
+    }
+#endif
+#if INTERRUPTS_TIMER0_ENEBLE
+    if (INTERRUPTS_ENABLE == INTCONbits.TMR0IF)
+    {
+        timer0_ISR();
     }
     else
     { /* Nothing */

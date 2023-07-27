@@ -31,5 +31,6 @@ void RB5_ISR(void);
 void RB6_ISR(void);
 void RB7_ISR(void);
 void ADC_ISR(void);
+void timer0_ISR(void);
 
 #endif /* MCAL_ISRS_H */

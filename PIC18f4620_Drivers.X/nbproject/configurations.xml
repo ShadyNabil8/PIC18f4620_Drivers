@@ -45,6 +45,14 @@
           <itemPath>MCAL/interrupts/mcal_ISRs.h</itemPath>
           <itemPath>MCAL/interrupts/mcal_peripheral_interrupts.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="timer0" displayName="timer0" projectFiles="true">
+          <itemPath>MCAL/timer0/hal_timer0.h</itemPath>
+          <itemPath>MCAL/timer0/hal_timer0_cfg.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="USART" displayName="USART" projectFiles="true">
+          <itemPath>MCAL/USART/hal_usart.h</itemPath>
+          <itemPath>MCAL/USART/hal_usart_cfg.h</itemPath>
+        </logicalFolder>
         <itemPath>MCAL/std_libraries.h</itemPath>
       </logicalFolder>
       <itemPath>ECU_Layer/ecu_layer_init.h</itemPath>
@@ -86,6 +94,12 @@
         <logicalFolder name="interrupts" displayName="interrupts" projectFiles="true">
           <itemPath>MCAL/interrupts/mcal_ISRs.c</itemPath>
           <itemPath>MCAL/interrupts/mcal_external_interrupts.c</itemPath>
+        </logicalFolder>
+        <logicalFolder name="timer0" displayName="timer0" projectFiles="true">
+          <itemPath>MCAL/timer0/hal_timer0.c</itemPath>
+        </logicalFolder>
+        <logicalFolder name="USART" displayName="USART" projectFiles="true">
+          <itemPath>MCAL/USART/hal_usart.c</itemPath>
         </logicalFolder>
       </logicalFolder>
       <itemPath>ECU_Layer/ecu_layer_init.c</itemPath>

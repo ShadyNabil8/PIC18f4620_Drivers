@@ -19,6 +19,8 @@
 #include "ECU_Layer/KeyPad/ecu_keypad.h"
 #include "ECU_Layer/char_lcd/ecu_char_lcd.h"
 #include "MCAL/ADC/hal_adc.h"
+#include "MCAL/timer0/hal_timer0.h"
+#include "MCAL/USART/hal_usart.h"
 
 #endif	/* APP_H */
 

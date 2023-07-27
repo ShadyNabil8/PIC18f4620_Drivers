@@ -1,16 +1,8 @@
 {
     "files.associations": {
-        "app.h": "c",
-        "ecu_keypad.h": "c",
-        "hal_gpio.h": "c",
-        "ecu_char_lcd.h": "c",
-        "mcal_std_types.h": "c",
-        "device_config.h": "c",
-        "hal_gpio_cfg.h": "c",
-        "compiler.h": "c",
-        "std_libraries.h": "c",
+        "hal_usart.h": "c",
         "mcal_interrupts_cfg.h": "c",
-        "mcal_external_interrupts.h": "c",
-        "hal_adc.h": "c"
+        "mcal_peripheral_interrupts.h": "c",
+        "app.h": "c"
     }
 }

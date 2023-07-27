@@ -49,11 +49,12 @@ Std_ReturnType adc_init(const ADC_t *adc_obj)
         interrputs_ADC_disable();
         interrputs_ADC_clear_flag();
         ADC_callback = adc_obj->ADC_Handler;
+        interrputs_ADC_enable();
 
 #if INTERRUPTS_PRIORITY_LEVELS_ENEBLE
-        interrputs_ADC_enable();
+
         interrputs_ADC_priority(adc_obj->priority);
-        
+        interrputs_priority_levels_enable();
 #if INTERRUPTS_ADC_HIGH_PRIORITY
         interrputs_high_priority_interrupt_eneble();
 #else
@@ -81,6 +82,10 @@ Std_ReturnType adc_deinit(const ADC_t *adc_obj)
     else
     {
         ADC_disable_module();
+
+#if INTERRUPTS_ADC_ENEBLE
+        interrputs_ADC_disable();
+#endif
     }
     return ret;
 }
