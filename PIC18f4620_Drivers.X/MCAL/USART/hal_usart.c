@@ -13,6 +13,7 @@ static void USART_serial_port_init(const usart_t *_usart);
 static void USART_mode_init(const usart_t *_usart);
 static void USART_bit_mode_init(const usart_t *_usart);
 static void USART_rule_init(const usart_t *_usart);
+static void USART_buffer_erase(uint8 *string, uint8 buffer_size);
 
 Std_ReturnType USART_init(const usart_t *_usart)
 {
@@ -53,7 +54,27 @@ void USART_write_uint32_blocking(uint32 n)
     snprintf(str, length + 1, "%d", n);
     USART_write_string_blocking(str);
 }
-
+void USART_read_byte_blocking(uint8 *data)
+{
+    USART_block_untill_reception_complete();
+    *data = RCREG;
+}
+void USART_read_string_blocking(uint8 *string, uint8 buffer_size)
+{
+    USART_buffer_erase(string, buffer_size);
+    uint8 index = 0;
+    uint8 data;
+    do
+    {
+        USART_read_byte_blocking(&data);
+        string[index] = data;
+        index++;
+    } while (data != '\0');
+}
+void USART_read_uint32_blocking(uint32 *n)
+{
+    // n = atoi()
+}
 /************************************************************************************************/
 
 static Std_ReturnType USART_pins_init()
@@ -69,6 +90,7 @@ static Std_ReturnType USART_pins_init()
             .direction = GPIO_DIRECTION_INPUT,
             .port = GPIO_PORTC_INDEX,
             .pin = GPIO_PIN7};
+
     ret &= gpio_pin_direction_intialize(&TX_pin);
     ret &= gpio_pin_direction_intialize(&RX_pin);
     return ret;
@@ -112,6 +134,17 @@ static void USART_mode_init(const usart_t *_usart)
             interrputs_usartTX_disable();
         }
     }
+    if (_usart->receiver.state == USART_ENABLE)
+    {
+        if (_usart->receiver.op_mode == USART_INTERRUPT_MODE)
+        {
+            interrputs_usartRX_enable();
+        }
+        else
+        {
+            interrputs_usartRX_disable();
+        }
+    }
 }
 static void USART_bit_mode_init(const usart_t *_usart)
 {
@@ -126,6 +159,17 @@ static void USART_bit_mode_init(const usart_t *_usart)
             USART_9_bit_transmission_enable();
         }
     }
+    if (_usart->receiver.state == USART_ENABLE)
+    {
+        if (_usart->receiver.bit_mode == USART_8BITS_MODE)
+        {
+            USART_8_bit_reception_enable();
+        }
+        else
+        {
+            USART_9_bit_reception_enable();
+        }
+    }
 }
 static void USART_rule_init(const usart_t *usart)
 {
@@ -133,4 +177,13 @@ static void USART_rule_init(const usart_t *usart)
     {
         USART_transmit_enable();
     }
+    if (usart->receiver.state == USART_ENABLE)
+    {
+        USART_enable_receiver();
+    }
+}
+static void USART_buffer_erase(uint8 *string, uint8 buffer_size)
+{
+    for (uint8 i = 0; i < buffer_size; i++)
+        string[i] = '\0';
 }

@@ -26,4 +26,7 @@
 #define interrputs_usartTX_disable() (PIE1bits.TXIE = INTERRUPTS_DISABLE)
 #define interrputs_usartTX_clear_flag() (PIR1bits.TXIF = INTERRUPTS_DISABLE)
 #define interrputs_usartTX_priority(_PRIORITY) (IPR1bits.TXIP = _PRIORITY)
+#define interrputs_usartRX_enable() (PIE1bits.RCIE = INTERRUPTS_ENABLE)
+#define interrputs_usartRX_disable() (PIE1bits.RCIE = INTERRUPTS_DISABLE)
+#define interrputs_usartRX_priority(_PRIORITY) (IPR1bits.RCIP = _PRIORITY)
 #endif /* MCAL_PERIPHERAL_INTERRUPTS_H */

@@ -27,6 +27,7 @@
 #define USART_ENABLE 1
 #define USART_DISABLE 0
 #define USART_SHIFT_REGISTER_FULL 0
+#define USART_RECEIVER_EMPTY 0
 
 #define USART_master_mode_enable() (TXSTAbits.CSRC = 1)
 #define USART_slave_mode_enable() (TXSTAbits.CSRC = 0)
@@ -50,6 +51,8 @@
 #define USART_set_SPBRG(_data) (SPBRG = _data)
 #define USART_block_untill_shift_rig_is_empty() \
     while (TXSTAbits.TRMT == USART_SHIFT_REGISTER_FULL)
+#define USART_block_untill_reception_complete() \
+    while (PIR1bits.RCIF == USART_RECEIVER_EMPTY)
 
 typedef uint8 USART_sync_mode;
 typedef uint8 USART_op_mode;
@@ -84,6 +87,8 @@ typedef struct
 
 Std_ReturnType USART_init(const usart_t *_usart);
 void USART_read_byte_blocking(uint8 *data);
+void USART_read_string_blocking(uint8 *string, uint8 buffer_size);
+void USART_read_uint32_blocking(uint32 *n);
 void USART_read_byte_interrupted(uint8 *data);
 void USART_write_byte_blocking(uint8 data);
 void USART_write_string_blocking(uint8 *str);
